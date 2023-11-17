@@ -3,7 +3,6 @@ import { ChannelDetailsDto } from '../api/generated/portal/ChannelDetailsDto';
 import { ChannelDetailsResource } from '../api/generated/portal/ChannelDetailsResource';
 import { ChannelPspListResource } from '../api/generated/portal/ChannelPspListResource';
 import { ChannelsResource } from '../api/generated/portal/ChannelsResource';
-import { PaymentTypesResource } from '../api/generated/portal/PaymentTypesResource';
 import { PspChannelPaymentTypes } from '../api/generated/portal/PspChannelPaymentTypes';
 import { PspChannelPaymentTypesResource } from '../api/generated/portal/PspChannelPaymentTypesResource';
 import { PspChannelsResource } from '../api/generated/portal/PspChannelsResource';
@@ -14,7 +13,6 @@ import { BackofficeApi } from '../api/BackofficeClient';
 import { PSP } from '../model/PSP';
 import { WfespPluginConfs } from '../api/generated/portal/WfespPluginConfs';
 import { ChannelOnCreation } from '../model/Channel';
-import { DelegationResource } from '../api/generated/portal/DelegationResource';
 import {
   getChannels as getChannelsMocked,
   getChannelsMerged as getChannelsMergedMocked,
@@ -33,6 +31,8 @@ import {
   updateWrapperChannel,
   getWfespPlugins as mockedGetWfespPlugins,
 } from './__mocks__/channelService';
+import {PaymentTypes} from "../api/generated/portal/PaymentTypes";
+import {Delegation} from "../api/generated/portal/Delegation";
 
 export const getChannels = (page: number): Promise<ChannelsResource> => {
   /* istanbul ignore if */
@@ -107,7 +107,7 @@ export const updateChannel = (
   }
 };
 
-export const getPaymentTypes = (): Promise<PaymentTypesResource> => {
+export const getPaymentTypes = (): Promise<PaymentTypes> => {
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
     return getPaymentTypesMocked();
   } else {
@@ -137,7 +137,7 @@ export const getChannelPSPs = (
   }
 };
 
-export const getDelegatedPSPbyBroker = (brokerId: string): Promise<Array<DelegationResource>> => {
+export const getDelegatedPSPbyBroker = (brokerId: string): Promise<Array<Delegation>> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
     return getDelegatedPSPbyBrokerMocked();

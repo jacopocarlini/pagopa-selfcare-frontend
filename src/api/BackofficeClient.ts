@@ -27,7 +27,6 @@ import {CreditorInstitutionDto} from './generated/portal/CreditorInstitutionDto'
 import {CreditorInstitutionDetailsResource} from './generated/portal/CreditorInstitutionDetailsResource';
 import {WrapperStationsResource} from './generated/portal/WrapperStationsResource';
 import {CreditorInstitutionsResource} from './generated/portal/CreditorInstitutionsResource';
-import {getCreditorInstitutionIbans} from './generated/portal/getCreditorInstitutionIbans';
 import {WrapperStationDetailsDto} from './generated/portal/WrapperStationDetailsDto';
 import {StationDetailsDto, StatusEnum} from './generated/portal/StationDetailsDto';
 import {WrapperEntitiesOperations} from './generated/portal/WrapperEntitiesOperations';
@@ -50,8 +49,14 @@ import {TavoloOpDto} from './generated/portal/TavoloOpDto';
 import {TavoloOpOperations} from './generated/portal/TavoloOpOperations';
 import {TavoloOpResource} from './generated/portal/TavoloOpResource';
 import {TavoloOpResourceList} from './generated/portal/TavoloOpResourceList';
-import {Product} from "../model/Product";
+import {Iban} from './generated/portal/Iban';
+import {Ibans} from './generated/portal/Ibans';
+import {IbanCreate} from './generated/portal/IbanCreate';
+import {Product} from "./generated/portal/Product";
+import {PaymentType} from "./generated/portal/PaymentType";
+import { Delegation } from './generated/portal/Delegation';
 
+// @ts-ignore
 const withBearer: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
     const token = storageTokenOps.read();
     return wrappedOperation({
@@ -120,10 +125,11 @@ const channelBody = (channel: ChannelDetailsDto) => ({
     timeout_a: channel.timeout_a,
     timeout_b: channel.timeout_b,
     timeout_c: channel.timeout_c,
+    validationUrl: ''
 });
 
 export const BackofficeApi = {
-    getInstitutions: async (productId: string): Promise<Array<Institution>> => {
+    getInstitutions: async (): Promise<Array<Institution>> => {
         const result = await backofficeClient.getInstitutions({});
         return extractResponse(result, 200, onRedirectToLogin);
     },
@@ -141,7 +147,7 @@ export const BackofficeApi = {
     },
 
     getInstitutionApiKeys: async (institutionId: string): Promise<Array<ProductKeys>> => {
-        const result = await backofficeClient.getInstitutionApiKeys({ 'institution-id' : institutionId});
+        const result = await backofficeClient.getInstitutionApiKeys({'institution-id': institutionId});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
@@ -150,34 +156,34 @@ export const BackofficeApi = {
         subscriptionCode: string
     ): Promise<Array<ProductKeys>> => {
         const result = await backofficeClient.createInstitutionApiKeys({
-            institutionId,
-            subscriptionCode,
+            'institution-id': institutionId,
+            'subscription-code': subscriptionCode,
         });
         return extractResponse(result, 201, onRedirectToLogin);
     },
 
     regeneratePrimaryKey: async (subscriptionid: string): Promise<string> => {
-        const result = await backofficeClient.regeneratePrimaryKey({subscriptionid});
+        const result = await backofficeClient.regeneratePrimaryKey({'subscription-id': subscriptionid});
         return extractResponse(result, 204, onRedirectToLogin);
     },
 
     regenerateSecondaryKey: async (subscriptionid: string): Promise<string> => {
-        const result = await backofficeClient.regenerateSecondaryKey({subscriptionid});
+        const result = await backofficeClient.regenerateSecondaryKey({'subscription-id': subscriptionid});
         return extractResponse(result, 204, onRedirectToLogin);
     },
 
     getBrokerAndPspDetails: async (code: string): Promise<BrokerOrPspDetailsResource> => {
-        const result = await backofficeClient.getBrokerAndPspDetails({code});
+        const result = await backofficeClient.getBrokerAndPspDetails({'psp-code': code});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     getPSPBrokerDetails: async (brokerpspcode: string): Promise<BrokerPspDetailsResource> => {
-        const result = await backofficeClient.getBrokerPsp({brokerpspcode});
+        const result = await backofficeClient.getBrokerPsp({'broker-code': brokerpspcode});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     getPSPDetails: async (pspcode: string): Promise<PaymentServiceProviderDetailsResource> => {
-        const result = await backofficeClient.getBrokerAndPspDetails({pspcode});
+        const result = await backofficeClient.getBrokerAndPspDetails({'psp-code':pspcode});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
@@ -192,14 +198,14 @@ export const BackofficeApi = {
             page,
             name,
             limit,
-            pspCode,
-            taxCode,
+            'psp-code':pspCode,
+            'tax-code':taxCode,
         });
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     getBrokerAndEcDetails: async (code: string): Promise<BrokerAndEcDetailsResource> => {
-        const result = await backofficeClient.createCreditorInstitutionAndBroker({code});
+        const result = await backofficeClient.getBrokerAndEcDetails({'ci-code':code});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
@@ -259,7 +265,7 @@ export const BackofficeApi = {
         psp: NodeOnSignInPSP
     ): Promise<PaymentServiceProviderDetailsResource> => {
         const result = await backofficeClient.updatePSP({
-            pspcode,
+            'psp-code':pspcode,
             body: {
                 business_name: psp.businessName,
                 enabled: true,
@@ -299,12 +305,12 @@ export const BackofficeApi = {
 
     // retrive of channel detail before on db and then on the node
     getChannelDetail: async (channelcode: string): Promise<ChannelDetailsResource> => {
-        const result = await backofficeClient.getChannelDetail({channelcode});
+        const result = await backofficeClient.getChannelDetail({'channel-code':channelcode});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     getPSPChannels: async (pspcode: string): Promise<PspChannelsResource> => {
-        const result = await backofficeClient.getPspChannels({pspcode});
+        const result = await backofficeClient.getPspChannels({'psp-code':pspcode});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
@@ -315,9 +321,9 @@ export const BackofficeApi = {
     ): Promise<ChannelPspListResource> => {
         // return all PSP associated to the channel
         const result = await backofficeClient.getChannelPaymentServiceProviders({
-            page,
-            channelcode,
-            limit,
+            'page': page,
+            'channel-code':channelcode,
+            'limit': limit,
         });
         return extractResponse(result, 200, onRedirectToLogin);
     },
@@ -366,7 +372,7 @@ export const BackofficeApi = {
     ): Promise<ChannelDetailsResource> => {
         const channelBody2Send = channelBody(channel);
         const result = await backofficeClient.updateChannel({
-            channelcode: code,
+            'channel-code': code,
             body: {...channelBody2Send, status: StatusEnum.APPROVED},
         });
         return extractResponse(result, 200, onRedirectToLogin);
@@ -416,19 +422,19 @@ export const BackofficeApi = {
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
-    getPaymentTypes: async (): Promise<PaymentTypesResource> => {
+    getPaymentTypes: async (): Promise<PaymentType> => {
         const result = await backofficeClient.getPaymentTypes({});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     getChannelCode: async (pspcode: string): Promise<ChannelCodeResource> => {
-        const result = await backofficeClient.getFirstValidChannelCode({pspcode});
+        const result = await backofficeClient.getFirstValidChannelCode({'psp-code': pspcode});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     getDelegatedPSPbyBroker: async (brokerId: string): Promise<Array<Delegation>> => {
-        const institutionId = undefined;
-        const result = await backofficeClient.getBrokerDelegation({institutionId, brokerId});
+        const institutionId = '';
+        const result = await backofficeClient.getBrokerDelegation({'institution-id': institutionId, brokerId});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
@@ -437,10 +443,11 @@ export const BackofficeApi = {
         pspcode: string,
         payment_types: PspChannelPaymentTypes
     ): Promise<PspChannelPaymentTypesResource> => {
+        // @ts-ignore
         const payment_types_array = payment_types as ReadonlyArray<string>;
         const result = await backofficeClient.updatePaymentServiceProvidersChannels({
-            channelcode,
-            pspcode,
+            'channel-code': channelcode,
+            'psp-code': pspcode,
             body: {payment_types: payment_types_array},
         });
         return extractResponse(result, 200, onRedirectToLogin);
@@ -448,17 +455,15 @@ export const BackofficeApi = {
 
     dissociatePSPfromChannel: async (channelcode: string, pspcode: string): Promise<void> => {
         const result = await backofficeClient.deletePSPChannels({
-            channelcode,
-            pspcode,
+            'channel-code': channelcode,
+            'psp-code': pspcode,
         });
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     createStation: async (station: StationOnCreation): Promise<StationDetailResource> => {
-        const result = await backofficeClient.createStation({
-            body: {
-                ...station,
-            },
+        // @ts-ignore
+        const result = await backofficeClient.createStation({body: {...station,},
         });
         return extractResponse(result, 201, onRedirectToLogin);
     },
@@ -498,7 +503,7 @@ export const BackofficeApi = {
     },
 
     getStationCode: async (ecCode: string): Promise<StationCodeResource> => {
-        const result = await backofficeClient.getStationCode({ecCode});
+        const result = await backofficeClient.getStationCode({'ec-code': ecCode});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
@@ -507,7 +512,7 @@ export const BackofficeApi = {
         station: CreditorInstitutionStationDto
     ): Promise<CreditorInstitutionStationEditResource> => {
         const result = await backofficeClient.associateStationToCreditorInstitution({
-            ecCode,
+            'ci-code': ecCode,
             body: {
                 auxDigit: station.auxDigit,
                 segregationCode: station.segregationCode,
@@ -520,8 +525,8 @@ export const BackofficeApi = {
 
     dissociateECfromStation: async (ecCode: string, stationcode: string): Promise<void> => {
         const result = await backofficeClient.deleteCreditorInstitutionStationRelationship({
-            ecCode,
-            stationcode,
+            'ci-code' : ecCode,
+            'station-code' : stationcode,
         });
         return extractResponse(result, 200, onRedirectToLogin);
     },
@@ -532,7 +537,7 @@ export const BackofficeApi = {
         limit?: number
     ): Promise<CreditorInstitutionsResource> => {
         const result = await backofficeClient.getCreditorInstitutionsByStationCode({
-            stationcode,
+            'station-code':stationcode,
             limit,
             page,
         });
@@ -543,6 +548,7 @@ export const BackofficeApi = {
         ec: CreditorInstitutionDto
     ): Promise<CreditorInstitutionDetailsResource> => {
         const result = await backofficeClient.createCreditorInstitutionAndBroker({
+            'ci-code': '',
             body: {
                 brokerDto: {
                     broker_code: ec.creditorInstitutionCode,
@@ -566,8 +572,10 @@ export const BackofficeApi = {
     createEcBroker: async (broker: BrokerDto): Promise<BrokerResource> => {
         const result = await backofficeClient.createBroker({
             body: {
-                broker_code: broker.broker_code,
-                description: broker.description,
+                broker_psp_code: broker.broker_code!,
+                description: broker.description!,
+                enabled: true,
+                extended_fault_bean: false
             },
         });
         return extractResponse(result, 201, onRedirectToLogin);
@@ -596,7 +604,7 @@ export const BackofficeApi = {
         ec: UpdateCreditorInstitutionDto
     ): Promise<CreditorInstitutionDetailsResource> => {
         const result = await backofficeClient.updateCreditorInstitutionDetails({
-            ecCode,
+            'ci-code':ecCode,
             body: {
                 address: ec.address,
                 businessName: ec.businessName,
@@ -694,25 +702,25 @@ export const BackofficeApi = {
                 ...station,
                 status: StatusEnum.APPROVED,
             },
-            'station-code':stationcode,
+            'station-code': stationcode,
         });
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     getWrapperEntitiesStation: async (code: string): Promise<WrapperEntitiesOperations> => {
-        const result = await backofficeClient.getWrapperEntitiesStation({'station-code':code});
+        const result = await backofficeClient.getWrapperEntitiesStation_1({'station-code': code});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     // before tries to get the detail from the DB, if it doesn't find anything, will try to get the detail form apim
     getStationDetail: async (stationId: string): Promise<StationDetailResource> => {
-        const result = await backofficeClient.getStationDetail({'station-code':stationId});
+        const result = await backofficeClient.getStation({'station-code': stationId});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
     // get the detail directly from apim
     getStation: async (stationId: string): Promise<StationDetailResource> => {
-        const result = await backofficeClient.getStation({'station-code':stationId});
+        const result = await backofficeClient.getStation({'station-code': stationId});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
@@ -721,36 +729,43 @@ export const BackofficeApi = {
         labelName?: string
     ): Promise<Ibans> => {
         const result = await backofficeClient.getCreditorInstitutionIbans({
-            'ci-code':creditorinstitutioncode,
+            'ci-code': creditorinstitutioncode,
             labelName,
         });
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
-    createIban: async (ibanBody: IbanCreateRequestDto): Promise<Iban> => {
+    createIban: async (
+        creditorinstitutioncode: string,
+        ibanBody: IbanCreate
+    ): Promise<Iban> => {
         const result = await backofficeClient.createCreditorInstitutionIbans({
+            'ci-code': creditorinstitutioncode,
             body: {
                 iban: ibanBody.iban,
                 description: ibanBody.description,
-                validityDate: ibanBody.validityDate,
-                dueDate: ibanBody.dueDate,
-                creditorInstitutionCode: ibanBody.creditorInstitutionCode,
-                active: ibanBody.active,
+                validity_date: ibanBody.validity_date,
+                due_date: ibanBody.due_date,
+                is_active: ibanBody.is_active,
             },
         });
         return extractResponse(result, 201, onRedirectToLogin);
     },
 
-    updateIban: async (ibanBody: IbanCreateRequestDto): Promise<Iban> => {
+    updateIban: async (
+        creditorinstitutioncode: string,
+        ibanBody: IbanCreate
+        ): Promise<Iban> => {
         const result = await backofficeClient.updateCreditorInstitutionIbans({
+            'ci-code': creditorinstitutioncode,
+            'iban-value': ibanBody.iban!,
             body: {
                 iban: ibanBody.iban,
                 description: ibanBody.description,
-                validityDate: ibanBody.validityDate,
-                dueDate: ibanBody.dueDate,
-                creditorInstitutionCode: ibanBody.creditorInstitutionCode,
+                validity_date: ibanBody.validity_date,
+                due_date: ibanBody.due_date,
                 labels: ibanBody.labels?.length === 0 ? undefined : ibanBody.labels,
-                active: ibanBody.active,
+                is_active: ibanBody.is_active,
             },
         });
         return extractResponse(result, 200, onRedirectToLogin);
@@ -759,7 +774,7 @@ export const BackofficeApi = {
     deleteIban: async (creditorinstitutioncode: string, ibanValue: string): Promise<void> => {
         const result = await backofficeClient.deleteCreditorInstitutionIbans({
             'ci-code': creditorinstitutioncode,
-            'iban-value':ibanValue,
+            'iban-value': ibanValue,
         });
         return extractResponse(result, 200, onRedirectToLogin);
     },

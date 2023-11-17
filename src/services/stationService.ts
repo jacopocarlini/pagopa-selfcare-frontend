@@ -27,7 +27,7 @@ import { WrapperStationDetailsDto } from '../api/generated/portal/WrapperStation
 import { WrapperEntitiesOperations } from '../api/generated/portal/WrapperEntitiesOperations';
 import { StationOnCreation } from '../model/Station';
 import { StationDetailsDto } from '../api/generated/portal/StationDetailsDto';
-import { DelegationResource } from '../api/generated/portal/DelegationResource';
+import {Delegation} from "../api/generated/portal/Delegation";
 
 export const createStation = (station: StationOnCreation): Promise<StationDetailResource> => {
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
@@ -112,11 +112,11 @@ export const associateEcToStation = (
 export const getStationAvailableEC = (
   institutionId?: string,
   brokerId?: string
-): Promise<DelegationResource> => {
+): Promise<Delegation> => {
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
     return getStationAvailableECMocked();
   } else {
-    return BackofficeApi.getStationAvailableEc(institutionId, brokerId).then((resource) => resource);
+    return BackofficeApi.getStationAvailableEc(institutionId!).then((resource) => resource);
   }
 };
 
@@ -145,7 +145,7 @@ export const updateWrapperStationToCheck = (
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
     return updateStationWrap(station, validationUrl);
   } else {
-    return BackofficeApi.updateWrapperStationToCheck(station, validationUrl).then(
+    return BackofficeApi.updateWrapperStationToCheck(station.stationCode, station, validationUrl).then(
       (resources) => resources
     );
   }
@@ -158,7 +158,7 @@ export const updateWrapperStationToCheckUpdate = (
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
     return updateStationWrap(station, validationUrl);
   } else {
-    return BackofficeApi.updateWrapperStationToCheckUpdate(station, validationUrl).then(
+    return BackofficeApi.updateWrapperStationToCheckUpdate(station.stationCode, station, validationUrl).then(
       (resources) => resources
     );
   }

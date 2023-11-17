@@ -12,12 +12,12 @@ export const getChannelsIdAssociatedToPSP = (
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
     return getChannelsMergedMocked(page, brokerCode, channelcodefilter, limit, sorting).then(
       (resources) =>
-        resources.channels.map((e) => (e.channel_code !== undefined ? e.channel_code : ''))
+        resources.channels!.map((e) => (e.channel_code !== undefined ? e.channel_code : ''))
     );
   } else {
     return BackofficeApi.getChannelsMerged(page, brokerCode, channelcodefilter, limit, sorting).then(
       (resources) =>
-        resources.channels.map((e) => (e.channel_code !== undefined ? e.channel_code : ''))
+        resources.channels!.map((e) => (e.channel_code !== undefined ? e.channel_code : ''))
     );
   }
 };
