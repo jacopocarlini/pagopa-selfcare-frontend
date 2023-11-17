@@ -27,6 +27,7 @@ import {CreditorInstitutionDto} from './generated/portal/CreditorInstitutionDto'
 import {CreditorInstitutionDetailsResource} from './generated/portal/CreditorInstitutionDetailsResource';
 import {WrapperStationsResource} from './generated/portal/WrapperStationsResource';
 import {CreditorInstitutionsResource} from './generated/portal/CreditorInstitutionsResource';
+import {getCreditorInstitutionIbans} from './generated/portal/getCreditorInstitutionIbans';
 import {WrapperStationDetailsDto} from './generated/portal/WrapperStationDetailsDto';
 import {StationDetailsDto, StatusEnum} from './generated/portal/StationDetailsDto';
 import {WrapperEntitiesOperations} from './generated/portal/WrapperEntitiesOperations';
@@ -49,6 +50,7 @@ import {TavoloOpDto} from './generated/portal/TavoloOpDto';
 import {TavoloOpOperations} from './generated/portal/TavoloOpOperations';
 import {TavoloOpResource} from './generated/portal/TavoloOpResource';
 import {TavoloOpResourceList} from './generated/portal/TavoloOpResourceList';
+import {Product} from "../model/Product";
 
 const withBearer: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
     const token = storageTokenOps.read();
@@ -121,7 +123,7 @@ const channelBody = (channel: ChannelDetailsDto) => ({
 });
 
 export const BackofficeApi = {
-    getInstitutions: async (productId: string): Promise<Array<InstitutionResource>> => {
+    getInstitutions: async (productId: string): Promise<Array<Institution>> => {
         const result = await backofficeClient.getInstitutions({});
         return extractResponse(result, 200, onRedirectToLogin);
     },
@@ -133,8 +135,8 @@ export const BackofficeApi = {
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
-    getProducts: async (institutionId: string): Promise<Array<Products>> => {
-        const result = await backofficeClient.getInstitutionProducts({institutionId});
+    getProducts: async (institutionId: string): Promise<Array<Product>> => {
+        const result = await backofficeClient.getInstitutionProducts({'institution-id': institutionId});
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
@@ -717,7 +719,7 @@ export const BackofficeApi = {
     getCreditorInstitutionIbans: async (
         creditorinstitutioncode: string,
         labelName?: string
-    ): Promise<IbansResource> => {
+    ): Promise<Ibans> => {
         const result = await backofficeClient.getCreditorInstitutionIbans({
             'ci-code':creditorinstitutioncode,
             labelName,
@@ -725,7 +727,7 @@ export const BackofficeApi = {
         return extractResponse(result, 200, onRedirectToLogin);
     },
 
-    createIban: async (ibanBody: IbanCreateRequestDto): Promise<IbanResource> => {
+    createIban: async (ibanBody: IbanCreateRequestDto): Promise<Iban> => {
         const result = await backofficeClient.createCreditorInstitutionIbans({
             body: {
                 iban: ibanBody.iban,
@@ -739,7 +741,7 @@ export const BackofficeApi = {
         return extractResponse(result, 201, onRedirectToLogin);
     },
 
-    updateIban: async (ibanBody: IbanCreateRequestDto): Promise<IbanResource> => {
+    updateIban: async (ibanBody: IbanCreateRequestDto): Promise<Iban> => {
         const result = await backofficeClient.updateCreditorInstitutionIbans({
             body: {
                 iban: ibanBody.iban,
