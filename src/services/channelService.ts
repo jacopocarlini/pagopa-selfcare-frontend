@@ -10,9 +10,10 @@ import { WrapperChannelsResource } from '../api/generated/portal/WrapperChannels
 import { WrapperChannelDetailsDto } from '../api/generated/portal/WrapperChannelDetailsDto';
 import { WrapperEntitiesOperations } from '../api/generated/portal/WrapperEntitiesOperations';
 import { BackofficeApi } from '../api/BackofficeClient';
-import { PSP } from '../model/PSP';
 import { WfespPluginConfs } from '../api/generated/portal/WfespPluginConfs';
 import { ChannelOnCreation } from '../model/Channel';
+import {PaymentTypes} from "../api/generated/portal/PaymentTypes";
+import {Delegation} from "../api/generated/portal/Delegation";
 import {
   getChannels as getChannelsMocked,
   getChannelsMerged as getChannelsMergedMocked,
@@ -31,8 +32,6 @@ import {
   updateWrapperChannel,
   getWfespPlugins as mockedGetWfespPlugins,
 } from './__mocks__/channelService';
-import {PaymentTypes} from "../api/generated/portal/PaymentTypes";
-import {Delegation} from "../api/generated/portal/Delegation";
 
 export const getChannels = (page: number): Promise<ChannelsResource> => {
   /* istanbul ignore if */

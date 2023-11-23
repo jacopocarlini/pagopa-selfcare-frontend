@@ -22,7 +22,7 @@
     "generate": "npm-run-all generate:*",
     "clean:api-portal": "rimraf src/api/generated/portal && rimraf openApi/generated",
     "generate:api-portal": "yarn run clean:api-portal && mkdirp openApi/generated && api-spec-converter --from=openapi_3 --to=swagger_2 openApi/portal-api-docs.json > openApi/generated/portal-swagger20.json && node openApi/scripts/api-portal_fixPreGen.js && node ./node_modules/@pagopa/selfcare-common-frontend/utils/fixSwagger20ArraySchemaDef.js openApi/generated/portal-swagger20.json && gen-api-models --api-spec openApi/generated/portal-swagger20.json --out-dir src/api/generated/portal --no-strict --request-types --response-decoders --client && node openApi/scripts/api-portal_fixPostGen.js",
-    "generate:openapi3": "jq 'del(.. | .security? | select(. != null))' ./openApi/portal-api-docs.json | jq 'walk(if type == \"object\" and has(\"parameters\") then .parameters |= map(select(.name != \"X-Request-Id\")) else . end)'  > ./openApi/portal-api-docs.json.temp && mv ./openApi/portal-api-docs.json.temp ./openApi/portal-api-docs.json && gen-api-models --api-spec ./openApi/portal-api-docs.json --no-strict --out-dir src/api/generated/portal --request-types --response-decoders --client"
+    "generate:openapi3": "jq 'walk(if type == \"object\" and has(\"parameters\") then .parameters |= map(select(.name != \"X-Request-Id\")) else . end)' ./openApi/portal-api-docs.json > ./openApi/portal-api-docs.json.temp && mv ./openApi/portal-api-docs.json.temp ./openApi/portal-api-docs.json && gen-api-models --api-spec ./openApi/portal-api-docs.json --no-strict --out-dir src/api/generated/portal --request-types --response-decoders --client && node openApi/scripts/api-portal_fixPostGen.js"
   },
   "dependencies": {
     "@mui/icons-material": "^5.8.2",
@@ -37,6 +37,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/react-router-hash-link": "^2.4.5",
     "axios": "^0.23.0",
+    "buffer": "^6.0.3",
     "date-fns": "^2.30.0",
     "formik": "^2.2.9",
     "node-fetch": "^3.3.0",
@@ -48,7 +49,8 @@
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "5.0.1",
     "react-use-scrollspy": "^3.0.1",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "@types/node": "^20.9.4"
   },
   "devDependencies": {
     "@babel/core": "7.18.6",
@@ -111,5 +113,3 @@
     ]
   }
 }
-
-

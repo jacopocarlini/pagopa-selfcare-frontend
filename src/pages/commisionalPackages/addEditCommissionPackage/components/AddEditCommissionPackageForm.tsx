@@ -430,7 +430,7 @@ const AddEditCommissionPackageForm = ({ commPackageDetails }: Prop) => {
                     data-testid="payment-type-test"
                   >
                     {paymentOptions &&
-                      sortPaymentType(paymentOptions.payment_types).map((option: any) => (
+                      sortPaymentType(paymentOptions!.payment_types!).map((option: any) => (
                         <MenuItem key={option.payment_type} value={option.payment_type}>
                           {`${option.description} - ${option.payment_type}`}
                         </MenuItem>

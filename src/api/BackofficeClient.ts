@@ -56,8 +56,7 @@ import {Product} from "./generated/portal/Product";
 import {PaymentType} from "./generated/portal/PaymentType";
 import { Delegation } from './generated/portal/Delegation';
 
-// @ts-ignore
-const withBearer: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: any) => {
+const withBearer: WithDefaultsT<'JWT'> = (wrappedOperation) => (params: any) => {
     const token = storageTokenOps.read();
     return wrappedOperation({
         ...params,
@@ -68,7 +67,7 @@ const withBearer: WithDefaultsT<'bearerAuth'> = (wrappedOperation) => (params: a
 export const backofficeClient = createClient({
     baseUrl: ENV.URL_API.APICONFIG,
     basePath: '',
-    fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.PORTAL),
+    fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.PORTAL) as any,
     withDefaults: withBearer,
 });
 
@@ -321,9 +320,9 @@ export const BackofficeApi = {
     ): Promise<ChannelPspListResource> => {
         // return all PSP associated to the channel
         const result = await backofficeClient.getChannelPaymentServiceProviders({
-            'page': page,
+            page,
             'channel-code':channelcode,
-            'limit': limit,
+            limit,
         });
         return extractResponse(result, 200, onRedirectToLogin);
     },
@@ -443,8 +442,7 @@ export const BackofficeApi = {
         pspcode: string,
         payment_types: PspChannelPaymentTypes
     ): Promise<PspChannelPaymentTypesResource> => {
-        // @ts-ignore
-        const payment_types_array = payment_types as ReadonlyArray<string>;
+        const payment_types_array = payment_types as any;
         const result = await backofficeClient.updatePaymentServiceProvidersChannels({
             'channel-code': channelcode,
             'psp-code': pspcode,
@@ -462,8 +460,7 @@ export const BackofficeApi = {
     },
 
     createStation: async (station: StationOnCreation): Promise<StationDetailResource> => {
-        // @ts-ignore
-        const result = await backofficeClient.createStation({body: {...station,},
+        const result = await backofficeClient.createStation({body: {...station,} as any,
         });
         return extractResponse(result, 201, onRedirectToLogin);
     },
