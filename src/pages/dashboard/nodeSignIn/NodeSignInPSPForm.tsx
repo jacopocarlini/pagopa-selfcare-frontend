@@ -64,7 +64,7 @@ const NodeSignInPSPForm = ({ goBack, signInData }: Props) => {
     name: selectedParty?.fiscalCode ?? '',
     businessName: selectedParty?.description ?? '',
     fiscalCode: selectedParty?.fiscalCode ?? '',
-    abiCode: selectedParty?.pspData?.abiCode ?? '',
+    abiCode: selectedParty?.pspData?.abi_code ?? '',
     pspCode:
       signInData.paymentServiceProviderDetailsResource?.psp_code ?? selectedParty?.fiscalCode ?? '',
     bicCode: signInData.paymentServiceProviderDetailsResource?.bic ?? '',

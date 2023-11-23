@@ -31,13 +31,14 @@ export const createOperationTable = (
 };
 
 export const updateOperationTable = (
+    ecCode: string,
   operationTableDto: TavoloOpDto
 ): Promise<TavoloOpOperations> => {
   /* istanbul ignore if */
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
     return updateOperationTableMocked(operationTableDto);
   } else {
-    return BackofficeApi.updateOperationTable(operationTableDto).then((resources) => resources);
+    return BackofficeApi.updateOperationTable(ecCode, operationTableDto).then((resources) => resources);
   }
 };
 

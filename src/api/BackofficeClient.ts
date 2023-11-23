@@ -625,7 +625,6 @@ export const BackofficeApi = {
 
     createWrapperStation: async (
         station: WrapperStationDetailsDto,
-        validationUrl: string
     ): Promise<WrapperEntitiesOperations> => {
         const result = await backofficeClient.createWrapperStationDetails({
             body: {
@@ -643,7 +642,7 @@ export const BackofficeApi = {
                 targetHost: station.targetHost ? station.targetHost : undefined,
                 targetPath: station.targetPath ? station.targetPath : undefined,
                 targetPort: station.targetPort ? station.targetPort : undefined,
-                validationUrl,
+                validationUrl: station.validationUrl
             },
         });
         return extractResponse(result, 201, onRedirectToLogin);
@@ -652,14 +651,12 @@ export const BackofficeApi = {
     updateWrapperStationToCheck: async (
         stationCode: string,
         station: StationDetailsDto,
-        validationUrl: string
     ): Promise<WrapperEntitiesOperations> => {
         const result = await backofficeClient.updateWrapperStationDetails({
             'station-code': stationCode,
             body: {
                 ...station,
-                status: StatusEnum.TO_CHECK,
-                validationUrl,
+                status: StatusEnum.TO_CHECK
             },
         });
         return extractResponse(result, 200, onRedirectToLogin);
@@ -667,8 +664,7 @@ export const BackofficeApi = {
 
     updateWrapperStationToCheckUpdate: async (
         stationCode: string,
-        station: StationDetailsDto,
-        validationUrl: string
+        station: StationDetailsDto
     ): Promise<WrapperEntitiesOperations> => {
         const result = await backofficeClient.updateWrapperStationDetails({
             'station-code': stationCode,
@@ -681,8 +677,7 @@ export const BackofficeApi = {
     },
 
     updateWrapperStationByOpt: async (
-        station: StationDetailsDto,
-        validationUrl: string
+        station: StationDetailsDto
     ): Promise<WrapperEntitiesOperations> => {
         const result = await backofficeClient.updateWrapperStationDetailsByOpt({
             body: {

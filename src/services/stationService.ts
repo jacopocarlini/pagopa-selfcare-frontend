@@ -122,12 +122,11 @@ export const getStationAvailableEC = (
 
 export const createWrapperStation = (
   station: WrapperStationDetailsDto,
-  validationUrl: string
 ): Promise<WrapperEntitiesOperations> => {
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
-    return createStationWrap(station, validationUrl);
+    return createStationWrap(station);
   }
-  return BackofficeApi.createWrapperStation(station, validationUrl).then((resources) => resources);
+  return BackofficeApi.createWrapperStation(station).then((resources) => resources);
 };
 
 export const getWrapperStation = (ecCode: string): Promise<WrapperEntitiesOperations> => {
@@ -140,38 +139,35 @@ export const getWrapperStation = (ecCode: string): Promise<WrapperEntitiesOperat
 
 export const updateWrapperStationToCheck = (
   station: StationDetailsDto,
-  validationUrl: string
 ): Promise<WrapperEntitiesOperations> => {
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
-    return updateStationWrap(station, validationUrl);
+    return updateStationWrap(station);
   } else {
-    return BackofficeApi.updateWrapperStationToCheck(station.stationCode, station, validationUrl).then(
+    return BackofficeApi.updateWrapperStationToCheck(station.stationCode, station).then(
       (resources) => resources
     );
   }
 };
 
 export const updateWrapperStationToCheckUpdate = (
-  station: StationDetailsDto,
-  validationUrl: string
+  station: StationDetailsDto
 ): Promise<WrapperEntitiesOperations> => {
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
-    return updateStationWrap(station, validationUrl);
+    return updateStationWrap(station);
   } else {
-    return BackofficeApi.updateWrapperStationToCheckUpdate(station.stationCode, station, validationUrl).then(
+    return BackofficeApi.updateWrapperStationToCheckUpdate(station.stationCode, station).then(
       (resources) => resources
     );
   }
 };
 
 export const updateWrapperStationByOpt = (
-  station: StationDetailsDto,
-  validationUrl: string
+  station: StationDetailsDto
 ): Promise<WrapperEntitiesOperations> => {
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
-    return updateStationWrapByOpt(station, validationUrl);
+    return updateStationWrapByOpt(station);
   } else {
-    return BackofficeApi.updateWrapperStationByOpt(station, validationUrl).then(
+    return BackofficeApi.updateWrapperStationByOpt(station).then(
       (resources) => resources
     );
   }

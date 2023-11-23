@@ -178,7 +178,7 @@ export const mockedChannel: ChannelDetailsDto = {
   on_us: false,
   password: 'string',
   payment_model: undefined,
-  payment_types: mockedPaymentTypes.payment_types!.map((e) => e.payment_type),
+  payment_types: mockedPaymentTypes.payment_types!.map((e) => e.payment_type) as any,
   port: 0,
   primitive_version: 1,
   protocol: ProtocolEnum.HTTPS,

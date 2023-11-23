@@ -1,4 +1,7 @@
 import { BackofficeApi } from '../api/BackofficeClient';
+import {Ibans} from "../api/generated/portal/Ibans";
+import {Iban} from "../api/generated/portal/Iban";
+import {IbanCreate} from "../api/generated/portal/IbanCreate";
 import {
   getCreditorInstitutionIbans as getCreditorInstitutionIbansMocked,
   createIban as createIbanMocked,
@@ -7,9 +10,6 @@ import {
   updateIbanCup as updateIbanCupMocked,
   deleteIban as deleteIbanMocked,
 } from './__mocks__/ibanService';
-import {Ibans} from "../api/generated/portal/Ibans";
-import {Iban} from "../api/generated/portal/Iban";
-import {IbanCreate} from "../api/generated/portal/IbanCreate";
 
 export const getIbanList = (
   creditorInstitutionCode: string,

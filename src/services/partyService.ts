@@ -7,7 +7,7 @@ export const fetchParties = (): Promise<Array<Party>> => {
   if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
     return new Promise((resolve) => resolve(mockedParties));
   } else {
-    return BackofficeApi.getInstitutions('prod-pagopa').then((institutionResources) =>
+    return BackofficeApi.getInstitutions().then((institutionResources) =>
       institutionResources ? institutionResources.map(institutionResource2Party) : []
     );
   }
@@ -24,7 +24,7 @@ export const fetchPartyDetails = (
     );
   }
 
-  return BackofficeApi.getInstitution(partyId).then((institutionResource) =>
+  return BackofficeApi.getInstitution(partyId).then((institutionResource: any) =>
     institutionResource ? institutionDetailResource2Party(institutionResource) : null
   );
 };

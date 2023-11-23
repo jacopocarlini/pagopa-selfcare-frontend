@@ -44,7 +44,6 @@ import {
   TaxonomyServicesResource,
   TouchpointsResource,
 } from '../../../../model/CommissionPackage';
-import { PaymentTypesResource } from '../../../../api/generated/portal/PaymentTypesResource';
 import {
   createCommissionPackage,
   getPaymentTypes,
@@ -57,6 +56,7 @@ import { getChannelsIdAssociatedToPSP } from '../../../../services/commissionPac
 import { useAppSelector } from '../../../../redux/hooks';
 import { partiesSelectors } from '../../../../redux/slices/partiesSlice';
 import GenericModal from '../../../../components/Form/GenericModal';
+import {PaymentTypes} from "../../../../api/generated/portal/PaymentTypes";
 
 type Prop = {
   commPackageDetails: CommissionPackageOnCreation | undefined;
@@ -79,7 +79,7 @@ const AddEditCommissionPackageForm = ({ commPackageDetails }: Prop) => {
   const addError = useErrorDispatcher();
   const selectedParty = useAppSelector(partiesSelectors.selectPartySelected);
   const brokerCode = typeof selectedParty !== 'undefined' ? selectedParty.fiscalCode : '';
-  const [paymentOptions, setPaymentOptions] = useState<PaymentTypesResource>(emptyPaymentTypes);
+  const [paymentOptions, setPaymentOptions] = useState<PaymentTypes>(emptyPaymentTypes);
   const [touchPoint, setTouchPoint] = useState<TouchpointsResource>({
     touchpointList: [],
   });
