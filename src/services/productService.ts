@@ -7,8 +7,9 @@ export const fetchProducts = (partyId: string): Promise<Array<ProductModel>> => 
   if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return new Promise((resolve) => resolve(mockedPartyProducts));
   } else {
-    return BackofficeApi.getProducts(partyId).then((productResources) =>
-      productResources ? productResources.map(productResource2Product) : []
+
+
+    return BackofficeApi.getProducts(partyId).then((productResources) =>productResources ? productResources.map(productResource2Product) : []
     );
   }
 };

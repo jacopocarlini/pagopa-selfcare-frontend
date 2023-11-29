@@ -79,6 +79,7 @@ export const useSelectedParty = (): (() => Promise<Party>) => {
           throw e;
         });
     } else {
+      
       return new Promise<Party>((resolve) => resolve(selectedParty));
     }
   };

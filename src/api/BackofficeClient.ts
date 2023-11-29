@@ -144,6 +144,7 @@ export const BackofficeApi = {
 
     getProducts: async (institutionId: string): Promise<Array<Product>> => {
         const result = await backofficeClient.getInstitutionProducts({'institution-id': institutionId});
+        
         return extractResponse(result, 200, onRedirectToLogin);
     },
 

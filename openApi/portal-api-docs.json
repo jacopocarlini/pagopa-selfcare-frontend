@@ -5980,8 +5980,7 @@
         "required": [
           "description",
           "id",
-          "title",
-          "url_bo"
+          "title"
         ],
         "type": "object",
         "properties": {

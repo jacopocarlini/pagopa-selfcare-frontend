@@ -9,7 +9,7 @@ export type ProductModel = {
   id: string;
   logo?: string;
   title: string;
-  urlBO: string;
+  urlBO?: string;
   urlPublic?: string;
   selfcareRole?: SelfcareRole;
   roles: Array<UserRole>;
