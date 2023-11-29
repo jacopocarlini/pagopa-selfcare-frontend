@@ -12,7 +12,7 @@ import {
 
 export const getOperationTableList = (): Promise<TavoloOpResourceList> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return getOperationTableListMocked();
   } else {
     return BackofficeApi.getOperationTableList().then((resources) => resources);
@@ -23,7 +23,7 @@ export const createOperationTable = (
   operationTableDto: TavoloOpDto
 ): Promise<TavoloOpOperations> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return createOperationTableMocked(operationTableDto);
   } else {
     return BackofficeApi.createOperationTable(operationTableDto).then((resources) => resources);
@@ -35,7 +35,7 @@ export const updateOperationTable = (
   operationTableDto: TavoloOpDto
 ): Promise<TavoloOpOperations> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return updateOperationTableMocked(operationTableDto);
   } else {
     return BackofficeApi.updateOperationTable(ecCode, operationTableDto).then((resources) => resources);
@@ -44,7 +44,7 @@ export const updateOperationTable = (
 
 export const getOperationTableDetails = (ecCode: string): Promise<TavoloOpResource> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return getOperationTableDetailsMocked(ecCode);
   } else {
     return BackofficeApi.getOperationTableDetails(ecCode).then((resources) => resources);

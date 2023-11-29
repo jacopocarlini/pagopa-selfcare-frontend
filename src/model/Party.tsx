@@ -1,5 +1,5 @@
 import { InstitutionDetail } from '../api/generated/portal/InstitutionDetail';
-import { Institution } from '../api/generated/portal/Institution';
+import {Institution} from '../api/generated/portal/Institution';
 import { PspData } from '../api/generated/portal/PspData';
 import { ENV } from '../utils/env';
 
@@ -32,30 +32,8 @@ export type UserRole = {
 const buildUrlLog = (partyId: string) =>
   `${ENV.URL_INSTITUTION_LOGO.PREFIX}${partyId}${ENV.URL_INSTITUTION_LOGO.SUFFIX}`;
 
-export const institutionResource2Party = (institutionResource: Institution): Party => {
-  const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
-  return {
-    partyId: institutionResource.id,
-    externalId: institutionResource.external_id,
-    originId: institutionResource.origin_id,
-    origin: institutionResource.origin,
-    description: institutionResource.description,
-    digitalAddress: institutionResource.address,
-    status:  'ACTIVE',
-    roles: ['admin'].map(
-        (u) => ({ partyRole: u === 'admin' ? 'DELEGATE' : 'OPERATOR', roleKey: u } as UserRole)
-    ),
-    urlLogo,
-    fiscalCode: institutionResource.tax_code,
-    registeredOffice: institutionResource.address,
-    institutionType: institutionResource.institution_type,
-    // pspData: institutionResource.psp_data,
-  };
-};
-
-export const institutionDetailResource2Party = (
-  institutionResource: InstitutionDetail
-): Party => {
+export const institutionResource2Party = (institutionResource: InstitutionDetail): Party => {
+  
   const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
   return {
     partyId: institutionResource.id,
@@ -63,14 +41,37 @@ export const institutionDetailResource2Party = (
     originId: institutionResource.origin_id,
     origin: institutionResource.origin,
     description: institutionResource.name,
-    digitalAddress: institutionResource.address,
+    digitalAddress: institutionResource.mail_address!,
+    status: institutionResource.status as 'ACTIVE' | 'PENDING',
+    roles: institutionResource.user_product_roles.map(
+        (u) => ({ partyRole: u === 'admin' ? 'DELEGATE' : 'OPERATOR', roleKey: u } as UserRole)
+    ),
+    urlLogo,
+    fiscalCode: institutionResource.tax_code,
+    registeredOffice: institutionResource.address!,
+    institutionType: institutionResource.institution_type,
+    pspData: institutionResource.psp_data,
+  };
+};
+
+export const institutionDetailResource2Party = (
+  institutionResource: Institution
+): Party => {
+  const urlLogo = institutionResource.id && buildUrlLog(institutionResource.id);
+  return {
+    partyId: institutionResource.id,
+    externalId: institutionResource.external_id,
+    originId: institutionResource.origin_id,
+    origin: institutionResource.origin,
+    description: institutionResource.description,
+    digitalAddress: institutionResource.digital_address!,
     status: 'ACTIVE', // 'ACTIVE' | 'PENDING',
     roles: [] /* institutionResource.userProductRoles.map(
       (u) => ({ partyRole: u, roleKey: u } as UserRole)
     ), */,
     urlLogo,
-    fiscalCode: institutionResource.fiscal_code,
-    registeredOffice: institutionResource.address,
+    fiscalCode: institutionResource.tax_code,
+    registeredOffice: institutionResource.address!,
     institutionType: institutionResource.institution_type,
   };
 };

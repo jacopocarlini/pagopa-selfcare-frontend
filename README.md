@@ -8,7 +8,7 @@
 - yarn start
 
 ## To execute locally mocking REST invocation, modify the file .env.development.local setting
-- REACT_APP_API_MOCK_PORTAL=true
+- REACT_APP_API_MOCK_BACKOFFICE=true
 
 ## To build a configured workspace execute the following command
 - yarn build

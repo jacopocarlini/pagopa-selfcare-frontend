@@ -9,7 +9,6 @@ import {ProductKeys} from '../model/ApiKey';
 import {NodeOnSignInPSP} from '../model/Node';
 import {PSPDirectDTO} from '../model/PSP';
 import {StationOnCreation} from '../model/Station';
-import {Institution} from './generated/portal/Institution';
 import {ChannelsResource} from './generated/portal/ChannelsResource';
 import {createClient, WithDefaultsT} from './generated/portal/client';
 import {PspChannelsResource} from './generated/portal/PspChannelsResource';
@@ -20,6 +19,8 @@ import {PspChannelPaymentTypesResource} from './generated/portal/PspChannelPayme
 import {StationCodeResource} from './generated/portal/StationCodeResource';
 import {CreditorInstitutionStationDto} from './generated/portal/CreditorInstitutionStationDto';
 import {StationDetailResource} from './generated/portal/StationDetailResource';
+import {InstitutionDetail} from './generated/portal/InstitutionDetail';
+import {Institution} from './generated/portal/Institution';
 import {CreditorInstitutionStationEditResource} from './generated/portal/CreditorInstitutionStationEditResource';
 import {ChannelCodeResource} from './generated/portal/ChannelCodeResource';
 import {ChannelPspListResource} from './generated/portal/ChannelPspListResource';
@@ -60,14 +61,14 @@ const withBearer: WithDefaultsT<'JWT'> = (wrappedOperation) => (params: any) => 
     const token = storageTokenOps.read();
     return wrappedOperation({
         ...params,
-        bearerAuth: `Bearer ${token}`,
+        JWT: `Bearer ${token}`,
     });
 };
 
 export const backofficeClient = createClient({
-    baseUrl: ENV.URL_API.APICONFIG,
+    baseUrl: ENV.URL_API.BACKOFFICE,
     basePath: '',
-    fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.PORTAL) as any,
+    fetchApi: buildFetchApi(ENV.API_TIMEOUT_MS.BACKOFFICE) as any,
     withDefaults: withBearer,
 });
 
@@ -128,8 +129,9 @@ const channelBody = (channel: ChannelDetailsDto) => ({
 });
 
 export const BackofficeApi = {
-    getInstitutions: async (): Promise<Array<Institution>> => {
+    getInstitutions: async (): Promise<Array<InstitutionDetail>> => {
         const result = await backofficeClient.getInstitutions({});
+        
         return extractResponse(result, 200, onRedirectToLogin);
     },
 

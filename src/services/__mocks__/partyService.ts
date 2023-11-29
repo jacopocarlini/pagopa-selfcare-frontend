@@ -2,7 +2,7 @@ import { Party } from '../../model/Party';
 import { PartyDetail } from '../../model/PartyDetail';
 
 export const pspAdminSignedDirect: Party = {
-  partyId: '26a0aabf-ce6a-4dfa-af4e-d4f744a8b944',
+  partyId: 'c05d6e41-943a-4c73-bfd8-bd79472853e8',
   externalId: 'pspAdminSigned',
   originId: 'PSP_pspAdminSigned',
   origin: 'SELC',

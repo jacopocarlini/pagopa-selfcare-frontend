@@ -9,7 +9,7 @@ export const getChannelsIdAssociatedToPSP = (
   limit?: number,
   sorting?: string
 ): Promise<Array<string>> => {
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return getChannelsMergedMocked(page, brokerCode, channelcodefilter, limit, sorting).then(
       (resources) =>
         resources.channels!.map((e) => (e.channel_code !== undefined ? e.channel_code : ''))

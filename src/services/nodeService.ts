@@ -35,7 +35,7 @@ export const createPSPDirect = (
   psp: NodeOnSignInPSP
 ): Promise<PaymentServiceProviderDetailsResource> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return createPSPDirectMocked(psp);
   } else {
     return BackofficeApi.createPSPDirect(psp).then((resources) => resources);
@@ -43,7 +43,7 @@ export const createPSPDirect = (
 };
 
 export const createPspBroker = (broker: BrokerPspDetailsDto): Promise<BrokerPspDetailsResource> => {
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return createPspBrokerMocked(broker);
   } else {
     return BackofficeApi.createPspBroker(broker).then((resources) => resources);
@@ -54,7 +54,7 @@ export const updatePSPInfo = (
   pspcode: string,
   psp: NodeOnSignInPSP
 ): Promise<PaymentServiceProviderDetailsResource> => {
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return updatePSPInfoMocked(pspcode, psp);
   } else {
     return BackofficeApi.updatePaymentServiceProvider(pspcode, psp);
@@ -64,7 +64,7 @@ export const updatePSPInfo = (
 export const createPSPIndirect = (
   psp: NodeOnSignInPSP
 ): Promise<PaymentServiceProviderDetailsResource> => {
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return createPSPIndirectMocked(psp);
   } else {
     return BackofficeApi.createPSPIndirect(psp);
@@ -73,7 +73,7 @@ export const createPSPIndirect = (
 
 export const getBrokerAndPspDetails = (pspcode: string): Promise<BrokerOrPspDetailsResource> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return getBrokerAndPspDetailsMocked(pspcode);
   } else {
     return BackofficeApi.getBrokerAndPspDetails(pspcode).then((resources) => resources);
@@ -82,7 +82,7 @@ export const getBrokerAndPspDetails = (pspcode: string): Promise<BrokerOrPspDeta
 
 export const getPSPBrokerDetails = (pspBrokerCode: string): Promise<BrokerPspDetailsResource> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return getPSPBrokerDetailsMocked(pspBrokerCode);
   } else {
     return BackofficeApi.getPSPBrokerDetails(pspBrokerCode).then((resources) => resources);
@@ -91,7 +91,7 @@ export const getPSPBrokerDetails = (pspBrokerCode: string): Promise<BrokerPspDet
 
 export const getPSPDetails = (pspCode: string): Promise<PaymentServiceProviderDetailsResource> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return getPSPDetailsMoked(pspCode);
   } else {
     return BackofficeApi.getPSPDetails(pspCode).then((resources) => resources);
@@ -105,7 +105,7 @@ export const getPaymentServiceProviders = (
   pspCode?: string,
   taxCode?: string
 ): Promise<PaymentServiceProvidersResource> => {
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return getPaymentServiceProvidersMocked(page, name, limit, pspCode, taxCode);
   } else {
     return BackofficeApi.getPaymentServiceProviders(page, name, limit, pspCode, taxCode).then(
@@ -116,7 +116,7 @@ export const getPaymentServiceProviders = (
 
 export const getBrokerAndEcDetails = (ecCode: string): Promise<BrokerAndEcDetailsResource> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return getBrokerAndEcDetailsMocked(ecCode);
   } else {
     return BackofficeApi.getBrokerAndEcDetails(ecCode).then((resources) => resources);
@@ -126,7 +126,7 @@ export const getBrokerAndEcDetails = (ecCode: string): Promise<BrokerAndEcDetail
 export const createECAndBroker = (
   ec: CreditorInstitutionDto
 ): Promise<CreditorInstitutionDetailsResource> => {
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return createECAndBrokerMocked(ec);
   } else {
     return BackofficeApi.createECAndBroker(ec).then((resources) => resources);
@@ -134,7 +134,7 @@ export const createECAndBroker = (
 };
 
 export const createEcBroker = (broker: BrokerDto): Promise<BrokerResource> => {
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return createEcBrokerMocked(broker);
   } else {
     return BackofficeApi.createEcBroker(broker).then((resources) => resources);
@@ -144,7 +144,7 @@ export const createEcBroker = (broker: BrokerDto): Promise<BrokerResource> => {
 export const createECIndirect = (
   ec: CreditorInstitutionDto
 ): Promise<CreditorInstitutionDetailsResource> => {
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return createECIndirectMocked(ec);
   } else {
     return BackofficeApi.createECIndirect(ec).then((resources) => resources);
@@ -155,7 +155,7 @@ export const updateCreditorInstitution = (
   ecCode: string,
   ec: UpdateCreditorInstitutionDto
 ): Promise<CreditorInstitutionDetailsResource> => {
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return updateECDirect(ecCode, ec);
   } else {
     return BackofficeApi.updateCreditorInstitution(ecCode, ec).then((resources) => resources);

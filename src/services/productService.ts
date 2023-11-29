@@ -4,7 +4,7 @@ import { mockedPartyProducts } from './__mocks__/productService';
 
 export const fetchProducts = (partyId: string): Promise<Array<ProductModel>> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_PORTAL === 'true') {
+  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
     return new Promise((resolve) => resolve(mockedPartyProducts));
   } else {
     return BackofficeApi.getProducts(partyId).then((productResources) =>

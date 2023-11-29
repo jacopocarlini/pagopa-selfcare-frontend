@@ -23,13 +23,12 @@ export const ENV = {
   },
 
   URL_API: {
-    PORTAL: env.get('REACT_APP_URL_API_PORTAL').required().asString(),
     TOKEN: env.get('REACT_APP_URL_API_TOKEN').required().asString(),
-    APICONFIG: env.get('REACT_APP_URL_API_APICONFIG').required().asString(),
+    BACKOFFICE: env.get('REACT_APP_URL_BACKOFFICE').required().asString(),
   },
 
   API_TIMEOUT_MS: {
-    PORTAL: env.get('REACT_APP_API_PORTAL_TIMEOUT_MS').required().asInt(),
+    BACKOFFICE: env.get('REACT_APP_API_BACKOFFICE_TIMEOUT_MS').required().asInt(),
   },
 
   URL_INSTITUTION_LOGO: {

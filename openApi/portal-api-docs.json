@@ -5653,10 +5653,8 @@
       },
       "Institution": {
         "required": [
-          "address",
           "attributes",
           "description",
-          "digital_address",
           "external_id",
           "id",
           "institution_type",
@@ -5691,9 +5689,11 @@
           "institution_type": {
             "type": "string",
             "enum": [
+              "AS",
               "PA",
               "GSP",
               "PT",
+              "PG",
               "SCP",
               "PSP",
               "SA"
@@ -5738,15 +5738,13 @@
       },
       "InstitutionDetail": {
         "required": [
-          "address",
           "external_id",
-          "fiscal_code",
           "id",
-          "mail_address",
           "name",
           "origin",
           "origin_id",
           "status",
+          "tax_code",
           "user_product_roles"
         ],
         "type": "object",
@@ -5766,18 +5764,17 @@
           "external_id": {
             "type": "string"
           },
-          "fiscal_code": {
-            "type": "string"
-          },
           "id": {
             "type": "string"
           },
           "institution_type": {
             "type": "string",
             "enum": [
+              "AS",
               "PA",
               "GSP",
               "PT",
+              "PG",
               "SCP",
               "PSP",
               "SA"
@@ -5804,6 +5801,9 @@
           "status": {
             "type": "string"
           },
+          "tax_code": {
+            "type": "string"
+          },
           "user_product_roles": {
             "type": "array",
             "items": {
@@ -5826,6 +5826,10 @@
           "page": {
             "type": "integer",
             "format": "int32"
+          },
+          "total_items": {
+            "type": "integer",
+            "format": "int64"
           },
           "total_pages": {
             "type": "integer",
