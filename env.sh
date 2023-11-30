@@ -9,8 +9,6 @@ echo "window._env_ = {" >> ./public/env-config.js
 # add them to env-config.js
 
 
-export "$(grep -v '^#' .env.window)" ;
-
 for react_var in $(env | grep -i REACT_APP_); do
     varname=$(printf '%s\n' "$react_var" | sed -e 's/=.*//')
     varvalue=$(printf '%s\n' "$react_var" | sed -e 's/^[^=]*=//')

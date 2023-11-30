@@ -1,5 +1,6 @@
 import { BackofficeApi } from '../api/BackofficeClient';
 import { ProductKeys } from '../model/ApiKey';
+import {ENV} from "../utils/env";
 import {
   getInstitutionApiKeys as getInstitutionApiKeysMocked,
   createInstitutionApiKeys as createInstitutionApiKeysMocked,
@@ -9,7 +10,7 @@ import {
 
 export const getInstitutionApiKeys = (institutionId: string): Promise<Array<ProductKeys>> => {
   /* istanbul ignore if */
-  if (process.env.REACT_APP_API_MOCK_BACKOFFICE === 'true') {
+  if (ENV.MOCK.TOKEN) {
     return getInstitutionApiKeysMocked(institutionId);
   } else {
     return BackofficeApi.getInstitutionApiKeys(institutionId).then((resources) => resources);

@@ -1,4 +1,5 @@
 import * as env from 'env-var';
+import {getConfig, Type} from "./config";
 
 const PUBLIC_URL_INNER: string | undefined = env.get('PUBLIC_URL').asString() || '/ui';
 export const ENV = {
@@ -6,7 +7,7 @@ export const ENV = {
   PUBLIC_URL: PUBLIC_URL_INNER,
 
   PAGOPA_OPERATOR: {
-    MAIL_ADDRESSES: env.get('REACT_APP_OPERATOR_EMAIL_ADDRESSES').required().asString(),
+    MAIL_ADDRESSES: getConfig('REACT_APP_OPERATOR_EMAIL_ADDRESSES', {required: true}),
   },
 
   ASSISTANCE: {
@@ -24,7 +25,12 @@ export const ENV = {
 
   URL_API: {
     TOKEN: env.get('REACT_APP_URL_API_TOKEN').required().asString(),
-    BACKOFFICE: env.get('REACT_APP_URL_BACKOFFICE').required().asString(),
+    BACKOFFICE: getConfig('REACT_APP_URL_BACKOFFICE', {required: true}),
+  },
+
+  MOCK: {
+    TOKEN: getConfig('REACT_APP_API_MOCK_TOKEN', {required: true, type:Type.boolean}),
+    BACKOFFICE: getConfig('REACT_APP_API_MOCK_BACKOFFICE', {required: true, type:Type.boolean}),
   },
 
   API_TIMEOUT_MS: {
@@ -38,22 +44,22 @@ export const ENV = {
 
   FEATURES: {
     DASHBOARD: {
-      ENABLED: env.get('REACT_APP_FEATURES_DASHBOARD_ENABLED').default('false').asBool(),
+      ENABLED: getConfig('REACT_APP_FEATURES_DASHBOARD_ENABLED', {default: false, type: Type.boolean}),
     },
     CHANNELS: {
-      ENABLED: env.get('REACT_APP_FEATURES_CHANNELS_ENABLED').default('false').asBool(),
+      ENABLED: getConfig('REACT_APP_FEATURES_CHANNELS_ENABLED', {default: false, type: Type.boolean}),
     },
     STATIONS: {
-      ENABLED: env.get('REACT_APP_FEATURES_STATIONS_ENABLED').default('false').asBool(),
+      ENABLED: getConfig('REACT_APP_FEATURES_STATIONS_ENABLED', {default: false, type: Type.boolean}),
     },
     IBAN: {
-      ENABLED: env.get('REACT_APP_FEATURES_IBAN_ENABLED').default('false').asBool(),
+      ENABLED: getConfig('REACT_APP_FEATURES_IBAN_ENABLED', {default: false, type: Type.boolean}),
     },
     COMMISSION_PACKAGES: {
-      ENABLED: env.get('REACT_APP_FEATURES_COMMISSION_PACKAGES_ENABLED').default('false').asBool(),
+      ENABLED: getConfig('REACT_APP_FEATURES_COMMISSION_PACKAGES_ENABLED', {default: false, type: Type.boolean}),
     },
     OPERATIONTABLE: {
-      ENABLED: env.get('REACT_APP_FEATURES_OPERATIONTABLE_ENABLED').default('false').asBool(),
+      ENABLED: getConfig('REACT_APP_FEATURES_OPERATIONTABLE_ENABLED', {default: false, type: Type.boolean}),
     },
   },
 
